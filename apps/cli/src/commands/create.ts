@@ -2,7 +2,8 @@ import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import path from 'path';
 import fs from 'fs-extra';
-import { validateLicenseKey, getCachedLicense, isDevelopmentMode } from '@quicksetup/license';
+// License validation disabled for now
+// import { validateLicenseKey, getCachedLicense, isDevelopmentMode } from '@quicksetup/license';
 import { generateProject, type ProjectConfig } from '@quicksetup/core';
 import {
   FRAMEWORKS,
@@ -37,42 +38,51 @@ export async function createProject(
   p.log.info(pc.dim('Ship your startup in days, not weeks'));
   console.log();
 
-  // Step 1: License Validation (skip in dev mode)
-  if (isDevelopmentMode()) {
-    p.log.warn('Development mode - skipping license validation');
-  } else {
-    const licenseKey = await getLicenseKey(options.license);
+  // License validation disabled for now - will be added later
 
-    if (!licenseKey) {
-      p.cancel('License key is required. Purchase at https://quicksetup.dev');
-      process.exit(1);
-    }
+  // Quick mode: use defaults if --yes flag is passed
+  if (options.yes) {
+    const projectName = projectNameArg || 'my-app';
+    const projectPath = path.resolve(process.cwd(), projectName);
 
-    const spinner = p.spinner();
-    spinner.start('Validating license...');
+    p.log.info(`Creating ${pc.cyan(projectName)} with defaults...`);
 
-    try {
-      const licenseResult = await validateLicenseKey(licenseKey);
+    const projectConfig: ProjectConfig = {
+      name: projectName,
+      path: projectPath,
+      framework: 'nextjs',
+      auth: 'none',
+      database: 'none',
+      orm: 'none',
+      payments: 'none',
+      email: 'none',
+      analytics: 'none',
+      ui: 'shadcn',
+      theme: 'default',
+      modules: [],
+      packageManager: 'pnpm',
+      git: options.git ?? true,
+    };
 
-      if (!licenseResult.valid) {
-        spinner.stop('License validation failed');
-        p.log.error(licenseResult.error || 'Invalid license key');
-        p.note('Purchase a license at https://quicksetup.dev', 'Get a license');
-        process.exit(1);
-      }
+    await fs.ensureDir(projectPath);
+    await generateProject(projectConfig);
 
-      spinner.stop('License validated');
-      p.log.success(`Licensed to ${pc.cyan(licenseResult.email)} (${licenseResult.tier} plan)`);
-    } catch (error) {
-      spinner.stop('License validation failed');
-      p.log.error(error instanceof Error ? error.message : 'Unknown error');
-      process.exit(1);
-    }
+    p.log.success('Project generated!');
+
+    p.note(
+      [
+        `cd ${projectName}`,
+        'pnpm install',
+        'pnpm dev',
+      ].join('\n'),
+      'Next steps'
+    );
+
+    p.outro(pc.green('Happy building!'));
+    return;
   }
 
-  console.log();
-
-  // Step 2: Project Configuration
+  // Step 2: Project Configuration (interactive)
   const config = await p.group(
     {
       projectName: () =>
@@ -308,40 +318,4 @@ export async function createProject(
   );
 
   p.outro(pc.green('Happy building!') + ' ' + pc.dim('- QuickSet.up'));
-}
-
-async function getLicenseKey(providedKey?: string): Promise<string | null> {
-  // Check provided key
-  if (providedKey) return providedKey;
-
-  // Check environment variable
-  if (process.env.QUICKSETUP_LICENSE) return process.env.QUICKSETUP_LICENSE;
-
-  // Check cached license
-  const cached = await getCachedLicense();
-  if (cached) {
-    const useCache = await p.confirm({
-      message: `Use cached license for ${pc.cyan(cached.email)}?`,
-      initialValue: true,
-    });
-
-    if (useCache && !p.isCancel(useCache)) {
-      return cached.key;
-    }
-  }
-
-  // Prompt for license key
-  const key = await p.text({
-    message: 'License key',
-    placeholder: 'XXXX-XXXX-XXXX-XXXX',
-    validate: (value) => {
-      if (!value || value.trim().length === 0) {
-        return 'License key is required';
-      }
-    },
-  });
-
-  if (p.isCancel(key)) return null;
-
-  return key as string;
 }

@@ -1,58 +1,126 @@
 @import 'tailwindcss';
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-  }
+/* Tailwind CSS 4.0 theme configuration */
+@theme {
+  --color-background: hsl(222 16% 8%);
+  --color-foreground: hsl(210 20% 96%);
+  --color-card: hsl(220 14% 11%);
+  --color-card-foreground: hsl(210 20% 96%);
+  --color-popover: hsl(220 14% 11%);
+  --color-popover-foreground: hsl(210 20% 96%);
+  --color-primary: hsl(172 72% 46%);
+  --color-primary-foreground: hsl(220 16% 10%);
+  --color-secondary: hsl(220 12% 16%);
+  --color-secondary-foreground: hsl(210 20% 96%);
+  --color-muted: hsl(220 10% 18%);
+  --color-muted-foreground: hsl(215 14% 64%);
+  --color-accent: hsl(36 88% 55%);
+  --color-accent-foreground: hsl(20 24% 12%);
+  --color-destructive: hsl(0 72% 52%);
+  --color-destructive-foreground: hsl(210 20% 96%);
+  --color-border: hsl(220 12% 22%);
+  --color-input: hsl(220 12% 22%);
+  --color-ring: hsl(172 72% 46%);
+  --color-brand: hsl(172 72% 46%);
+  --color-signal: hsl(36 88% 55%);
+  --color-surface: hsl(220 14% 12%);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.9rem;
+  --radius-xl: 1rem;
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Space Grotesk', ui-monospace, monospace;
 }
 
 @layer base {
+  :root {
+    color-scheme: dark;
+  }
+
   * {
-    @apply border-border;
+    border-color: var(--color-border);
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M48 0H0V48' stroke='rgba(255,255,255,0.06)'/%3E%3Cpath d='M0 24H48' stroke='rgba(255,255,255,0.03)'/%3E%3Cpath d='M24 0V48' stroke='rgba(255,255,255,0.03)'/%3E%3C/svg%3E");
+    background-size: 48px 48px;
+    background-attachment: fixed;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::marker {
+    content: '';
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-primary) 25%, transparent);
+    color: var(--color-foreground);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .shadow-soft {
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  }
+
+  .reveal,
+  .reveal-1,
+  .reveal-2,
+  .reveal-3,
+  .reveal-4 {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fade-up 0.9s ease forwards;
+  }
+
+  .reveal-1 {
+    animation-delay: 0.12s;
+  }
+
+  .reveal-2 {
+    animation-delay: 0.24s;
+  }
+
+  .reveal-3 {
+    animation-delay: 0.36s;
+  }
+
+  .reveal-4 {
+    animation-delay: 0.48s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-1,
+  .reveal-2,
+  .reveal-3,
+  .reveal-4 {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

@@ -45,7 +45,7 @@ export function getTemplatesPath(
   category: string,
   name: string
 ): string {
-  return path.resolve(__dirname, '../../templates', category, name);
+  return path.resolve(__dirname, '../templates', category, name);
 }
 
 export async function copyTemplateFiles(

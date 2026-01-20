@@ -1,60 +1,739 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+});
+
+const LAUNCH_OFFSET_MINUTES = 4;
+
+const tabs = [
+  {
+    label: 'Signal',
+    eyebrow: 'Demand intel',
+    title: 'Turn interest into a clear launch map.',
+    description:
+      'Capture intent from every channel, score it instantly, and shape a message that feels obvious to your audience.',
+    bullets: [
+      'Auto-tag inbound replies and waitlist signups',
+      'Map pain points into a one-page narrative',
+      'Know what to cut before you ever build it',
+    ],
+    metric: 'Time saved: 6 hours',
+  },
+  {
+    label: 'Story',
+    eyebrow: 'Message design',
+    title: 'Write the pitch once, reuse it everywhere.',
+    description:
+      'Generate a launch story that works for landing pages, emails, and demos without rewriting from scratch.',
+    bullets: [
+      'Instant hook generator with proof scaffolding',
+      'Copy blocks for pricing, onboarding, and demos',
+      'Tone presets for direct, calm, or punchy launches',
+    ],
+    metric: 'Time saved: 4.5 hours',
+  },
+  {
+    label: 'Build',
+    eyebrow: 'Focused sprints',
+    title: 'Ship the smallest launch that still feels premium.',
+    description:
+      'Turn the narrative into a scoped build plan and keep every sprint small, visible, and decisive.',
+    bullets: [
+      'Scope lock checklist with daily milestones',
+      'Decision log so you stop reopening old debates',
+      'Pre-flight QA cards for the last 48 hours',
+    ],
+    metric: 'Time saved: 8 hours',
+  },
+  {
+    label: 'Launch',
+    eyebrow: 'Go live rhythm',
+    title: 'Make every release feel rehearsed.',
+    description:
+      'Coordinate outreach, publish updates, and track momentum with a launch rhythm you can repeat.',
+    bullets: [
+      'Sequenced outreach plan with smart reminders',
+      'Live metrics board that stays human-friendly',
+      'Post-launch debrief so the next one is easier',
+    ],
+    metric: 'Time saved: 5 hours',
+  },
+];
+
+const testimonials = [
+  {
+    quote:
+      'We launched in a week without the usual panic. The flow made every decision feel obvious.',
+    name: 'Amina R.',
+    title: 'Solo founder',
+  },
+  {
+    quote:
+      'The narrative kit alone was worth it. We stopped rewriting the same copy over and over.',
+    name: 'Gabe L.',
+    title: 'Product lead',
+  },
+  {
+    quote:
+      'Our team finally had a launch routine. It felt calm, fast, and actually fun.',
+    name: 'Priya D.',
+    title: 'Studio partner',
+  },
+];
+
+const faqs = [
+  {
+    question: 'What exactly is <%= config.name %>?',
+    answer:
+      'It is a launch operating system: playbooks, checklists, and story frameworks that compress the chaos of shipping into a repeatable flow.',
+  },
+  {
+    question: 'Is this for solo founders or teams?',
+    answer:
+      'Both. Solo founders get the structure and focus. Small teams get alignment without extra meetings.',
+  },
+  {
+    question: 'Do I get updates?',
+    answer:
+      'Yes. You get lifetime updates, including new playbooks and templates as they ship.',
+  },
+  {
+    question: 'Can I use it for multiple products?',
+    answer:
+      'Absolutely. Use it for every launch, client project, or internal release without limits.',
+  },
+  {
+    question: 'Do I need extra tools or integrations?',
+    answer:
+      'No. Everything works in a lightweight workspace. Drop it into your existing stack when you want to.',
+  },
+  {
+    question: 'Is there a refund?',
+    answer:
+      'Yes. If it is not a fit, we offer a 14-day no-questions refund.',
+  },
+];
+
 export default function Home() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [liveTime, setLiveTime] = useState('--:--');
+  const [launchTime, setLaunchTime] = useState('--:--');
+  const [queueCount, setQueueCount] = useState(12);
+  const [focusWindow, setFocusWindow] = useState(42);
+  const [signalScore, setSignalScore] = useState(84);
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setLiveTime(timeFormatter.format(now));
+      setLaunchTime(
+        timeFormatter.format(
+          new Date(now.getTime() - LAUNCH_OFFSET_MINUTES * 60 * 1000)
+        )
+      );
+
+      const minutes = now.getMinutes();
+      setQueueCount(12 + (minutes % 5));
+      setFocusWindow(35 + (minutes % 15));
+      setSignalScore(78 + (minutes % 17));
+    };
+
+    update();
+    const interval = setInterval(update, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const active = tabs[activeTab];
+  const focusMultiplier = Math.max(2, queueCount - 9);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-center font-mono text-sm">
-        <h1 className="text-4xl font-bold text-center mb-8">
-          Welcome to <span className="text-primary"><%= config.name %></span>
-        </h1>
-
-        <p className="text-center text-muted-foreground mb-12">
-          Built with QuickSet.up - Ship your startup in days, not weeks.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <Card
-            title="Documentation"
-            description="Find in-depth information about your stack."
-            href="https://docs.quicksetup.dev"
-          />
-          <Card
-            title="Learn"
-            description="Learn about Next.js in an interactive course."
-            href="https://nextjs.org/learn"
-          />
-          <Card
-            title="Deploy"
-            description="Instantly deploy your app with Vercel."
-            href="https://vercel.com/new"
-          />
+    <div className="min-h-screen text-foreground">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
+              QS
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Launch OS
+              </p>
+              <p className="text-lg font-semibold"><%= config.name %></p>
+            </div>
+          </div>
+          <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
+            <a className="hover:text-foreground" href="#product">
+              Product
+            </a>
+            <a className="hover:text-foreground" href="#workflow">
+              Workflow
+            </a>
+            <a className="hover:text-foreground" href="#pricing">
+              Pricing
+            </a>
+            <a className="hover:text-foreground" href="#faq">
+              FAQ
+            </a>
+          </nav>
+          <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-2 rounded-full border border-border/70 bg-card px-3 py-1 text-xs text-muted-foreground sm:flex">
+              <span className="h-2 w-2 rounded-full bg-primary" />
+              Live {liveTime}
+            </div>
+            <a
+              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition hover:bg-primary/90"
+              href="#pricing"
+            >
+              Get Access
+            </a>
+          </div>
         </div>
-      </div>
-    </main>
-  );
-}
+      </header>
 
-function Card({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <a
-      href={href}
-      className="group rounded-lg border border-border bg-card px-5 py-4 transition-colors hover:border-primary hover:bg-accent"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <h2 className="mb-3 text-xl font-semibold">
-        {title}{' '}
-        <span className="inline-block transition-transform group-hover:translate-x-1">
-          &rarr;
-        </span>
-      </h2>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </a>
+      <main>
+        <section className="mx-auto max-w-6xl px-6 pb-20 pt-16">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <div className="reveal inline-flex items-center gap-2 rounded-full border border-border/70 bg-card px-3 py-1 text-xs uppercase tracking-[0.25em] text-muted-foreground">
+                <span className="h-2 w-2 rounded-full bg-accent" />
+                Quiet, confident launches
+              </div>
+              <h1 className="reveal-1 text-balance mt-6 text-4xl font-semibold leading-tight md:text-6xl">
+                Make every launch feel rehearsed.
+              </h1>
+              <p className="reveal-2 mt-6 text-lg text-muted-foreground">
+                <%= config.name %> turns demand, messaging, and execution into a
+                repeatable launch system so you can ship with calm confidence,
+                not chaos.
+              </p>
+              <div className="reveal-3 mt-8 flex flex-wrap gap-3">
+                <a
+                  className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition hover:bg-primary/90"
+                  href="#pricing"
+                >
+                  Start for $129
+                </a>
+                <a
+                  className="rounded-full border border-border/70 px-6 py-3 text-sm font-semibold text-foreground transition hover:border-primary"
+                  href="#product"
+                >
+                  See the system
+                </a>
+              </div>
+              <div className="reveal-4 mt-6 flex flex-wrap gap-6 text-sm text-muted-foreground">
+                <div>
+                  <span className="font-semibold text-foreground">4 steps</span>{' '}
+                  from signal to launch
+                </div>
+                <div>
+                  <span className="font-semibold text-foreground">No subs</span>{' '}
+                  pay once, keep forever
+                </div>
+                <div>
+                  <span className="font-semibold text-foreground">
+                    Solo-ready
+                  </span>{' '}
+                  built for lean teams
+                </div>
+              </div>
+            </div>
+            <div className="reveal-1 rounded-3xl border border-border/80 bg-card p-6 shadow-soft">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span className="uppercase tracking-[0.3em]">launch.ts</span>
+                <span className="rounded-full border border-border/70 px-3 py-1">
+                  synced {liveTime}
+                </span>
+              </div>
+              <div className="mt-5 rounded-2xl border border-border/60 bg-background/40 p-4 font-mono text-sm leading-7">
+                <p>
+                  <span className="text-primary">const</span> launch_time ={' '}
+                  <span className="text-accent">"{launchTime}"</span>;
+                </p>
+                <p>
+                  <span className="text-primary">const</span> focus_window ={' '}
+                  <span className="text-foreground">"{focusWindow} min"</span>;
+                </p>
+                <p>
+                  <span className="text-primary">const</span> signal_score ={' '}
+                  <span className="text-foreground">{signalScore}</span>;
+                </p>
+                <p>
+                  <span className="text-primary">const</span> queue ={' '}
+                  <span className="text-foreground">{queueCount}</span>;
+                </p>
+              </div>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-border/60 bg-secondary/70 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    Next action
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-foreground">
+                    Record the 3-line pitch
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    ETA {launchTime}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/60 bg-secondary/70 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    Energy check
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-foreground">
+                    Focus mode: locked
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Noise filtered x{focusMultiplier}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl border border-border/70 bg-card p-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Build window
+              </p>
+              <p className="mt-2 text-2xl font-semibold">4.5 days</p>
+              <p className="text-xs text-muted-foreground">
+                average first launch
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border/70 bg-card p-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Decision log
+              </p>
+              <p className="mt-2 text-2xl font-semibold">18 entries</p>
+              <p className="text-xs text-muted-foreground">
+                avoid repeat debates
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border/70 bg-card p-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Clarity score
+              </p>
+              <p className="mt-2 text-2xl font-semibold">{signalScore}</p>
+              <p className="text-xs text-muted-foreground">
+                live from your signals
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border/70 bg-card p-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Launch queue
+              </p>
+              <p className="mt-2 text-2xl font-semibold">{queueCount}</p>
+              <p className="text-xs text-muted-foreground">
+                prioritized tasks
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="proof" className="py-16">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Proof
+                </p>
+                <h2 className="text-balance mt-4 text-3xl font-semibold md:text-4xl">
+                  Convince without the noise.
+                </h2>
+              </div>
+              <p className="max-w-md text-sm text-muted-foreground">
+                Built for founders who want a calm, repeatable launch rhythm that
+                still feels premium to customers.
+              </p>
+            </div>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {testimonials.map((item) => (
+                <div
+                  key={item.name}
+                  className="rounded-2xl border border-border/70 bg-card p-6"
+                >
+                  <p className="text-sm text-muted-foreground">
+                    "{item.quote}"
+                  </p>
+                  <div className="mt-4 text-sm font-semibold text-foreground">
+                    {item.name}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {item.title}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="product" className="py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Product
+                </p>
+                <h2 className="text-balance mt-4 text-3xl font-semibold md:text-5xl">
+                  Tabs that reframe the launch.
+                </h2>
+              </div>
+              <p className="max-w-md text-sm text-muted-foreground">
+                Move through each step with purpose. Every tab is a focused
+                workspace, not another feature dump.
+              </p>
+            </div>
+
+            <div
+              className="mt-8 flex flex-wrap gap-3"
+              role="tablist"
+              aria-label="Launch tabs"
+            >
+              {tabs.map((tab, index) => {
+                const isActive = activeTab === index;
+                return (
+                  <button
+                    key={tab.label}
+                    className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                      isActive
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-border/70 bg-card text-muted-foreground hover:text-foreground'
+                    }`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActiveTab(index)}
+                  >
+                    <span
+                      className={`h-2 w-2 rounded-full ${
+                        isActive ? 'bg-primary-foreground' : 'bg-primary/70'
+                      }`}
+                    />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+              <div className="rounded-3xl border border-border/70 bg-card p-8">
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  {active.eyebrow}
+                </p>
+                <h3 className="mt-4 text-2xl font-semibold md:text-3xl">
+                  {active.title}
+                </h3>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {active.description}
+                </p>
+                <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
+                  {active.bullets.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="text-primary">+</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-border/70 bg-secondary/70 px-4 py-3 text-sm">
+                  <span className="text-accent">Impact</span>
+                  <span className="text-foreground">{active.metric}</span>
+                </div>
+              </div>
+              <div className="rounded-3xl border border-border/70 bg-card p-8">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span className="uppercase tracking-[0.3em]">Live board</span>
+                  <span className="rounded-full border border-border/70 px-3 py-1">
+                    updated {liveTime}
+                  </span>
+                </div>
+                <div className="mt-6 grid gap-4">
+                  <div className="rounded-2xl border border-border/60 bg-secondary/60 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      Signal score
+                    </p>
+                    <p className="mt-2 text-3xl font-semibold">
+                      {signalScore}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      confidence window: high
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-border/60 bg-secondary/60 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      Launch window
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">
+                      {launchTime}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      4 minutes behind real time
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-border/60 bg-secondary/60 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      Queue
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">
+                      {queueCount} items
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      focus window {focusWindow} min
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="workflow" className="py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Workflow
+                </p>
+                <h2 className="text-balance mt-4 text-3xl font-semibold md:text-4xl">
+                  Operate in quiet sprints.
+                </h2>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  The system keeps you in motion without the late-night scramble.
+                  Every sprint ends with a concrete launch artifact.
+                </p>
+                <div className="mt-6 rounded-2xl border border-border/70 bg-card p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    Weekly ritual
+                  </p>
+                  <p className="mt-2 text-sm text-foreground">
+                    Monday scope lock. Thursday launch. Friday debrief.
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Next sync {liveTime}
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-4">
+                <div className="rounded-2xl border border-border/70 bg-card p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    01
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold">
+                    Demand snapshot
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Gather signal, score it, and choose one story to lead with.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-card p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    02
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold">
+                    Narrative deck
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Write the offer, proof, and outcome in a single shared doc.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-card p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    03
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold">
+                    Focused build
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Build only what the story needs. Everything else waits.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-card p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                    04
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold">Launch pulse</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Ship, announce, learn, and roll the insights forward.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="pricing" className="py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="text-center">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Pricing
+              </p>
+              <h2 className="text-balance mt-4 text-3xl font-semibold md:text-5xl">
+                Own your launch system.
+              </h2>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Pay once. Use forever. No subscriptions.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-3xl border border-border/70 bg-card p-8">
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Launch
+                </p>
+                <div className="mt-4 flex items-end gap-2">
+                  <span className="text-4xl font-semibold">$129</span>
+                  <span className="text-xs text-muted-foreground">USD</span>
+                </div>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Ideal for solo founders shipping their first or next product.
+                </p>
+                <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Demand capture playbook
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Narrative and positioning templates
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Launch checklist with scope lock
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Post-launch debrief guide
+                  </li>
+                </ul>
+                <a
+                  className="mt-8 inline-flex w-full items-center justify-center rounded-full border border-border/70 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary"
+                  href="#cta"
+                >
+                  Get Launch
+                </a>
+              </div>
+              <div className="rounded-3xl border border-primary/70 bg-card p-8 shadow-soft">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-primary">
+                  Most chosen
+                </div>
+                <p className="mt-4 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  Studio
+                </p>
+                <div className="mt-4 flex items-end gap-2">
+                  <span className="text-4xl font-semibold">$199</span>
+                  <span className="text-xs text-muted-foreground">USD</span>
+                </div>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Built for builders who launch multiple products or client
+                  projects every quarter.
+                </p>
+                <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Everything in Launch
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Multi-launch planning board
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Advanced story prompts and outreach scripts
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-primary">+</span>
+                    Priority update track
+                  </li>
+                </ul>
+                <a
+                  className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+                  href="#cta"
+                >
+                  Get Studio
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                  FAQ
+                </p>
+                <h2 className="text-balance mt-4 text-3xl font-semibold md:text-4xl">
+                  Quick answers, calm launches.
+                </h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Still have questions? Reach out and we will get you unstuck.
+                </p>
+              </div>
+              <div className="space-y-3">
+                {faqs.map((item, index) => (
+                  <details
+                    key={item.question}
+                    className="group rounded-2xl border border-border/70 bg-card p-5"
+                    open={index === 0}
+                  >
+                    <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-foreground">
+                      <span>{item.question}</span>
+                      <span className="text-muted-foreground">+</span>
+                    </summary>
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      {item.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="cta" className="py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="rounded-3xl border border-border/70 bg-card p-10 text-center shadow-soft">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                Ready to ship
+              </p>
+              <h2 className="text-balance mt-4 text-3xl font-semibold md:text-4xl">
+                Make the next launch your calmest.
+              </h2>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Choose your system and move in quiet, confident sprints.
+              </p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a
+                  className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition hover:bg-primary/90"
+                  href="#pricing"
+                >
+                  Get Launch ($129)
+                </a>
+                <a
+                  className="inline-flex items-center justify-center rounded-full border border-border/70 px-6 py-3 text-sm font-semibold text-foreground transition hover:border-primary"
+                  href="#pricing"
+                >
+                  Get Studio ($199)
+                </a>
+              </div>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Lifetime updates. 14-day refund.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-border/70 py-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-xs text-muted-foreground sm:flex-row">
+          <p>
+            <%= config.name %> - launch with calm confidence.
+          </p>
+          <p>Last sync {liveTime} local</p>
+        </div>
+      </footer>
+    </div>
   );
 }

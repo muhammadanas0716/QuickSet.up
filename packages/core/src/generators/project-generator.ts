@@ -12,7 +12,8 @@ import { createLogger } from '../utils/logger.js';
 import { getInstaller } from '../installers/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TEMPLATES_DIR = path.resolve(__dirname, '../../templates');
+// Templates are in packages/core/templates (relative to dist after build)
+const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
 
 export async function generateProject(
   config: ProjectConfig
