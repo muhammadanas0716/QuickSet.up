@@ -1,0 +1,60 @@
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <div className="z-10 w-full max-w-5xl items-center justify-center font-mono text-sm">
+        <h1 className="text-4xl font-bold text-center mb-8">
+          Welcome to <span className="text-primary"><%= config.name %></span>
+        </h1>
+
+        <p className="text-center text-muted-foreground mb-12">
+          Built with QuickSet.up - Ship your startup in days, not weeks.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <Card
+            title="Documentation"
+            description="Find in-depth information about your stack."
+            href="https://docs.quicksetup.dev"
+          />
+          <Card
+            title="Learn"
+            description="Learn about Next.js in an interactive course."
+            href="https://nextjs.org/learn"
+          />
+          <Card
+            title="Deploy"
+            description="Instantly deploy your app with Vercel."
+            href="https://vercel.com/new"
+          />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function Card({
+  title,
+  description,
+  href,
+}: {
+  title: string;
+  description: string;
+  href: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="group rounded-lg border border-border bg-card px-5 py-4 transition-colors hover:border-primary hover:bg-accent"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <h2 className="mb-3 text-xl font-semibold">
+        {title}{' '}
+        <span className="inline-block transition-transform group-hover:translate-x-1">
+          &rarr;
+        </span>
+      </h2>
+      <p className="text-sm text-muted-foreground">{description}</p>
+    </a>
+  );
+}

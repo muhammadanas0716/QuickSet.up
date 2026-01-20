@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+
+/* Startup Theme - Bold Gradients, Energetic */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 270 50% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 270 50% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 50% 10%;
+    --primary: 270 91% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 330 81% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 270 20% 96%;
+    --muted-foreground: 270 20% 45%;
+    --accent: 330 81% 95%;
+    --accent-foreground: 330 81% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 270 20% 90%;
+    --input: 270 20% 90%;
+    --ring: 270 91% 65%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 270 50% 5%;
+    --foreground: 0 0% 98%;
+    --card: 270 50% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 270 50% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 270 91% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 330 81% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 270 30% 15%;
+    --muted-foreground: 270 20% 65%;
+    --accent: 270 30% 15%;
+    --accent-foreground: 270 91% 75%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 270 30% 20%;
+    --input: 270 30% 20%;
+    --ring: 270 91% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Gradient utilities for Startup theme */
+@layer utilities {
+  .gradient-primary {
+    @apply bg-gradient-to-r from-violet-600 to-fuchsia-500;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent;
+  }
+
+  .gradient-border {
+    @apply border-transparent bg-gradient-to-r from-violet-600 to-fuchsia-500;
+  }
+}
