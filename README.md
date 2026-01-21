@@ -4,7 +4,7 @@
 
 QuickSet.up is a modern, modular CLI-based boilerplate generator for web applications. Pick your stack, customize your theme, and generate production-ready code in seconds.
 
-[![License](https://img.shields.io/badge/license-proprietary-blue.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)]()
 [![pnpm](https://img.shields.io/badge/pnpm-%3E%3D9.0.0-orange.svg)]()
 
@@ -458,7 +458,6 @@ my-app/
 - [ ] Mantine
 
 ### Features Not Yet Implemented
-- [ ] License key validation
 - [ ] `quicksetup add` command (add modules to existing projects)
 - [ ] Config file support (`quicksetup.config.ts`)
 - [ ] Multiple framework support (Nuxt, SvelteKit, etc.)
@@ -508,7 +507,6 @@ my-app/
 - [ ] All UI libraries (4 total)
 - [ ] All themes (5 total)
 - [ ] All modules (11 total)
-- [ ] License key validation
 - [ ] `quicksetup add` command
 
 ### Phase 3: Polish & Growth
@@ -580,9 +578,6 @@ quicksetup/
 │   │   │   ├── payments/
 │   │   │   └── themes/
 │   │   └── package.json
-│   │
-│   └── license/                # License validation (disabled)
-│       └── package.json
 │
 ├── turbo.json                  # Turborepo config
 ├── pnpm-workspace.yaml         # pnpm workspace config
@@ -658,7 +653,7 @@ Contributions are welcome! Please read our contributing guidelines before submit
 
 ## License
 
-This is a proprietary product. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

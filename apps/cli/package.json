@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Create a production-ready web application in seconds",
   "author": "QuickSet.up",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "create-quicksetup": "./dist/index.js"
@@ -24,7 +24,6 @@
   "dependencies": {
     "@clack/prompts": "^0.8.2",
     "@quicksetup/core": "workspace:*",
-    "@quicksetup/license": "workspace:*",
     "commander": "^13.0.0",
     "fs-extra": "^11.2.0",
     "ora": "^8.1.1",

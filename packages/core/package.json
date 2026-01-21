@@ -2,6 +2,7 @@
   "name": "@quicksetup/core",
   "version": "0.0.1",
   "description": "Core template engine and generator for QuickSet.up",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

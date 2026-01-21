@@ -2,8 +2,6 @@ import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import path from 'path';
 import fs from 'fs-extra';
-// License validation disabled for now
-// import { validateLicenseKey, getCachedLicense, isDevelopmentMode } from '@quicksetup/license';
 import { generateProject, type ProjectConfig } from '@quicksetup/core';
 import {
   FRAMEWORKS,
@@ -21,7 +19,6 @@ import {
 import { validateProjectName, needsOrm } from '../utils/validators.js';
 
 interface CLIOptions {
-  license?: string;
   skipInstall?: boolean;
   git?: boolean;
   yes?: boolean;
@@ -37,8 +34,6 @@ export async function createProject(
 
   p.log.info(pc.dim('Ship your startup in days, not weeks'));
   console.log();
-
-  // License validation disabled for now - will be added later
 
   // Quick mode: use defaults if --yes flag is passed
   if (options.yes) {

@@ -4,7 +4,7 @@
   "private": true,
   "description": "Ship your startup in days, not weeks - The modern boilerplate generator",
   "author": "QuickSet.up",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
